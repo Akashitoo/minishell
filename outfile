@@ -1,0 +1,12 @@
+builtins.c
+builtins.o
+f
+libft
+ls
+Makefile
+minishell
+minishell.c
+minishell.h
+minishell.o
+outfile
+permdeni
