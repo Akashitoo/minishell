@@ -6,7 +6,7 @@
 /*   By: abalasub <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:06:48 by abalasub          #+#    #+#             */
-/*   Updated: 2024/06/17 12:42:45 by abalasub         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:18:00 by abalasub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ void	shell_cd(t_token *tokens_list);
 void	shell_pwd(void);
 void	shell_env(t_env *env);
 void	shell_export(t_env *env, t_token *tokens_list);
-void	shell_unset(t_env *env, t_token *tokens_list);
+void	shell_unset(t_env **env, t_token *tokens_list);
 
 #endif

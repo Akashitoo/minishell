@@ -6,7 +6,7 @@
 /*   By: abalasub <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:05:53 by abalasub          #+#    #+#             */
-/*   Updated: 2024/06/17 17:33:54 by abalasub         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:17:54 by abalasub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,14 +168,13 @@ int	main(int argc, char **argv, char **envp)
 			else if (ft_strncmp(tokens_list->str, "export", 6) == 0)
 				shell_export(environ, tokens_list);
 			else if (ft_strncmp(tokens_list->str,"unset", 5) == 0)
-				shell_unset(environ, tokens_list);
+				shell_unset(&environ, tokens_list);
 			else if (ft_strncmp(tokens_list->str, "exit", 4) == 0)
 				break;
 			free_tokens_list(tokens_list);
-			free(prompt);
 		}
 	}
-	free(prompt);
+	free_tab(prompt);
 	free_tokens_list(tokens_list);
 	free_environ(environ);
 	(void)argc;

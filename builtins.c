@@ -11,34 +11,43 @@
 
 #include "minishell.h"
 
+int	is_full_n(char *str)
+{
+	int i;
+
+	i = 2;
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	shell_echo(t_token *tokens_list)
 {
 	t_token *current;
 
+	int	nl;
+
+	nl = 1;
 	current = tokens_list->next;
 
-	if (ft_strncmp(current->str, "-n", 2) == 0)
+	while (current && (ft_strncmp(current->str, "-n", 2) == 0 && is_full_n(current->str)))
 	{
+		nl = 0;
 		current = current->next;
-		while (current)
-		{	
-			printf("%s", current->str);
-			if (current->next)
-				printf(" ");
-			current = current->next;
-		}
 	}
-	else
-	{
-		while (current)
-		{
-			printf("%s", current->str);
-			if (current->next)
-				printf(" ");
-			current = current->next;
-		}
+	while (current)
+	{	
+		printf("%s", current->str);
+		if (current->next)
+			printf(" ");
+		current = current->next;
+	}
+	if (nl)
 		printf("\n");
-	}
 }
 
 void	shell_cd(t_token *tokens_list)
@@ -78,6 +87,20 @@ void	shell_env(t_env *env)
 	}
 }
 
+int	is_equal_sign(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+			return (i);
+		i++;
+	}
+	return (0);
+}
+
 void	shell_export(t_env *env, t_token *tokens_list)
 {
 	char	*str;
@@ -85,35 +108,42 @@ void	shell_export(t_env *env, t_token *tokens_list)
 
 	str = tokens_list->next->str;
 	current = env;
-	while (current->next)
+	if (is_equal_sign(str))
 	{
-		current = current->next;
+		while (current->next)
+		{
+			current = current->next;
+		}
+		current->next = new_var(str);
 	}
-	current->next = new_var(str);
 }
 
-void	shell_unset(t_env *env, t_token *tokens_list)
+void	shell_unset(t_env **env, t_token *tokens_list)
 {
 	t_env	*previous;
 	t_env *current;
+	t_token *current_token;
 
-	current = env;
+	current = *env;
+	current_token = tokens_list->next;
 	previous = NULL;
-
-	while (current)
+	while (current_token)
 	{
-		if (ft_strncmp(current->str,tokens_list->next->str, ft_strlen(tokens_list->next->str)) == 0)
+		while (current)
 		{
-			if (!previous)
-				env = current->next;
-			else
+			if ((ft_strncmp(current->str,current_token->str, ft_strlen(current_token->str)) == 0)
+				&& (current->str[ft_strlen(current_token->str)] == '='))
 			{
-				previous->next = current->next;
-				env = previous;
+				if (!previous)
+					*env = current->next;
+				else
+					previous->next = current->next;	
 			}
-				
+			previous= current;
+			current = current->next;
 		}
-		previous= current;
-		current = current->next;
-	}
+		current_token= current_token->next;
+		current = *env;
+		previous = NULL;
+	}	
 }
