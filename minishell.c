@@ -144,6 +144,30 @@ void	free_environ(t_env *environ)
 	}
 	environ = NULL;
 }
+
+void	exec_line(t_token *token_list)
+{
+	t_token	*current_token;
+	char	*infile;
+	char	*outfile;
+
+	current_token = token_list;
+	while (current_token)
+	{
+		if (current_token->type == 2)
+		{
+			infile = current_token->next->str;
+			current_token = current_token->next;
+		}
+		if (current_token->type == 3)
+		{
+			outfile = current_token->next->str;
+			current_token = current_token->next;			
+		}
+		current_token = current_token->next;		
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	**prompt;
