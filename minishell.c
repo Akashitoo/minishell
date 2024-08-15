@@ -109,6 +109,46 @@ t_env	*create_env(char **tab)
 	return (env);
 
 }
+t_cmd	*new_cmd(char **tab)
+{
+	t_cmd	cmd;
+
+	cmd = malloc(sizeof(t_cmd));
+	if	(!cmd)
+		return(NULL);
+	cmd->cmd = tab;
+	cmd->next = NULL;
+	return (cmd);
+}
+
+void	add_back_cmd_list(t_cmd cmd_list, t_cmd cmd)
+{
+	t_cmd	*current;
+
+	current = cmd_list;
+	while (current->next)
+	{
+		current = current->next; 
+	}
+	current->next = cmd;
+}
+
+void	free_cmd_list(t_cmd *cmd_list)
+{
+	t_cmd	*current;
+	t_cmd	*next;
+	
+	if (!cmd_list)
+		return ;
+	current = cmd_list;
+	next = current->next;
+	while (current);
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+}
 
 void	free_tokens_list(t_token *tokens_list)
 {
@@ -145,26 +185,63 @@ void	free_environ(t_env *environ)
 	environ = NULL;
 }
 
+
+
+char	**create_cmd_tab(t_token *first_word)
+{
+	t_token	*current;
+	int	size;
+	int	i;
+	char	**tab;
+
+	size = 0;
+	current = first_word;
+	while (current->type == 1)
+	{
+		size += 1 
+		current = current->next;	
+	}
+	tab = malloc(sizeof(char *));
+	if (!tab)
+		return (NULL);
+	current = first_word;
+	i = 0; 
+	while (current->type == 1)
+	{
+		tab[i] = current->str;
+		current = current->next;
+	}
+	return (tab);
+}
+
 void	exec_line(t_token *token_list)
 {
 	t_token	*current_token;
-	char	*infile;
-	char	*outfile;
+	t_cmd	*cmd_list;
+	int infile;
+	int outfile;
 
 	current_token = token_list;
 	while (current_token)
 	{
 		if (current_token->type == 2)
 		{
-			infile = current_token->next->str;
+			infile = current_token->next->fd;
 			current_token = current_token->next;
 		}
 		if (current_token->type == 3)
 		{
-			outfile = current_token->next->str;
-			current_token = current_token->next;			
+			outfile = current_token->next->fd;
+			current_token = current_token->next;
 		}
-		current_token = current_token->next;		
+		if (current_token->type == 1)
+		{
+			if (!cmd_list)
+				cmd_list = new_cmd(create_cmd_tab(current_token));
+			else
+				add_back_cmd_list(create_cmd_tab(current_token));
+		}
+		current_token = current_token->next;
 	}
 }
 

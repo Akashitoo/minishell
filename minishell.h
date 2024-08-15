@@ -40,6 +40,13 @@ typedef struct s_env
 	struct s_env *next;
 }	t_env;
 
+
+typedef struct s_cmd
+{
+	char	**cmd;
+	struct	s_cmd	*next;
+}	t_cmd;
+
 t_env   *new_var(char *str);
 void    add_back_env(t_env *env, t_env *var);
 
