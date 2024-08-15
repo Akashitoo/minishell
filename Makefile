@@ -6,7 +6,13 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -g
 
 SRCS = minishell.c \
-       builtins.c
+       builtins.c \
+	   lexing_akash/src/lexing/create_token.c \
+	   lexing_akash/src/lexing/token_quoting.c \
+	   lexing_akash/src/lexing/tokenizer.c \
+	   lexing_akash/src/utils/free.c \
+	   lexing_akash/src/utils/utils.c \
+	   lexing_akash/src/main.c \
 
 OBJS = $(SRCS:.c=.o)
 

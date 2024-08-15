@@ -24,7 +24,7 @@ int tokenizer1(t_data *parsing)
 		{ 
 			if (!create_token(parsing))
 				return (freetokens(parsing->token_list), 0);
-				parsing->status = 2;
+			parsing->status = 2;
 		}
 		else
 		{
@@ -36,8 +36,8 @@ int tokenizer1(t_data *parsing)
 		}
 		parsing->flag = 0;
 	}
-	if (parsing->status != 2 && parsing->str[parsing->i] == '\'' || parsing->str[parsing->i] == '\"')
-		parsing->status = token_quoting(parsing);
+	if ((parsing->status != 2 && parsing->str[parsing->i] == '\'' ) || (parsing->str[parsing->i] == '\"'))
+	parsing->status = token_quoting(parsing);
 	// else if (parsing->str[parsing->i] == '$')
 	// 	parsing->status = token_variable_env(&parsing);
 	else

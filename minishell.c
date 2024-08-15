@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "lexing_akash/include/minishell.h"
 
 
 void	free_tab(char **tab)
@@ -27,7 +27,7 @@ void	free_tab(char **tab)
 	}
 	free(tab);
 }
-
+/*
 t_token	*new_token(char *str, int type)
 {
 
@@ -40,7 +40,7 @@ t_token	*new_token(char *str, int type)
 	token->type = type;
 	token->next = NULL;
 	return (token);	
-}
+}*/
 
 void	add_token_back(t_token *tokens_list, t_token *added_token)
 {
@@ -54,19 +54,16 @@ void	add_token_back(t_token *tokens_list, t_token *added_token)
 	current->next = added_token;
 }
 
-t_token	*create_tokens_list(char **prompt)
+t_token	*create_tokens_list(char *prompt)
 {
-	t_token	*tokens_list;
-	int	i;
+	t_data 	parsing;
 
-	tokens_list = new_token(prompt[0], 1);
-	i = 1;
-	while (prompt[i])
-	{
-		add_token_back(tokens_list, new_token(prompt[i], 1));
-		i++;
-	}
-	return (tokens_list);
+	if (prompt == NULL)
+		return (NULL);
+	lexing_init(&parsing, prompt);
+	if (!tokenizer(&parsing))
+		return (NULL);
+	return (parsing.token_list);
 }
 
 t_env	*new_var(char *str)
@@ -109,9 +106,10 @@ t_env	*create_env(char **tab)
 	return (env);
 
 }
+
 t_cmd	*new_cmd(char **tab)
 {
-	t_cmd	cmd;
+	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
 	if	(!cmd)
@@ -121,7 +119,7 @@ t_cmd	*new_cmd(char **tab)
 	return (cmd);
 }
 
-void	add_back_cmd_list(t_cmd cmd_list, t_cmd cmd)
+void	add_back_cmd_list(t_cmd *cmd_list, t_cmd *cmd)
 {
 	t_cmd	*current;
 
@@ -142,7 +140,7 @@ void	free_cmd_list(t_cmd *cmd_list)
 		return ;
 	current = cmd_list;
 	next = current->next;
-	while (current);
+	while (current)
 	{
 		next = current->next;
 		free(current);
@@ -196,9 +194,9 @@ char	**create_cmd_tab(t_token *first_word)
 
 	size = 0;
 	current = first_word;
-	while (current->type == 1)
+	while (current && current->type == 1)
 	{
-		size += 1 
+		size += 1;
 		current = current->next;	
 	}
 	tab = malloc(sizeof(char *));
@@ -206,7 +204,7 @@ char	**create_cmd_tab(t_token *first_word)
 		return (NULL);
 	current = first_word;
 	i = 0; 
-	while (current->type == 1)
+	while (current && current->type == 1)
 	{
 		tab[i] = current->str;
 		current = current->next;
@@ -220,7 +218,7 @@ void	exec_line(t_token *token_list)
 	t_cmd	*cmd_list;
 	int infile;
 	int outfile;
-
+	cmd_list = NULL;
 	current_token = token_list;
 	while (current_token)
 	{
@@ -239,7 +237,7 @@ void	exec_line(t_token *token_list)
 			if (!cmd_list)
 				cmd_list = new_cmd(create_cmd_tab(current_token));
 			else
-				add_back_cmd_list(create_cmd_tab(current_token));
+				add_back_cmd_list(new_cmd(create_cmd_tab(current_token)), cmd_list);
 		}
 		current_token = current_token->next;
 	}
@@ -247,14 +245,14 @@ void	exec_line(t_token *token_list)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	**prompt;
+	char	*prompt;
 	t_env	*environ;
 	t_token *tokens_list;
 
 	environ = create_env(envp);
 	while (1)
 	{
-		prompt = ft_split(readline("$minishell>"), ' ');
+		prompt = readline("minishell>");
 		tokens_list = create_tokens_list(prompt);
 		if (tokens_list)
 		{
@@ -272,10 +270,11 @@ int	main(int argc, char **argv, char **envp)
 				shell_unset(&environ, tokens_list);
 			else if (ft_strncmp(tokens_list->str, "exit", 4) == 0)
 				break;
+			exec_line(tokens_list);
 			free_tokens_list(tokens_list);
 		}
 	}
-	free_tab(prompt);
+	free(prompt);
 	free_tokens_list(tokens_list);
 	free_environ(environ);
 	(void)argc;

@@ -13,11 +13,10 @@ void	lexing_init(t_data *parsing, char *str)
 	parsing->token_list = NULL;
 	
 }
-
+/*
 int main (int argc, char **argv)
 {
 	t_data 	parsing;
-	char *str;
 
 	if (argc != 2)
 		return (0);
@@ -25,8 +24,9 @@ int main (int argc, char **argv)
 	//jusqu'ici aucun malloc de fait
 	if (!tokenizer(&parsing))
 		return (0);
-	//free(str);
-	print_tokens(parsing.token_list);
+	
+
 	freetokens(parsing.token_list);
 	return (1);
 }
+*/

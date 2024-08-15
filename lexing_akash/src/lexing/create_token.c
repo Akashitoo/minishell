@@ -69,7 +69,7 @@ int	which_token_id(t_data *parsing, char *str)
 int	create_token(t_data *parsing)
 {
 	int		index;
-	t_token	*new_token;
+	t_token	*new_token = NULL;
 	int	i;
 
 	i = 0;

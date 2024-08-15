@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrabut <atrabut@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abalasub <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 17:14:50 by atrabut           #+#    #+#             */
-/*   Updated: 2024/08/02 16:22:27 by atrabut          ###   ########.fr       */
+/*   Created: 2024/06/10 15:06:48 by abalasub          #+#    #+#             */
+/*   Updated: 2024/06/20 13:18:00 by abalasub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-
-
 # include <stdio.h>
-# include <stdlib.h>
-# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <unistd.h>
+# include "libft/libft.h"
 
 # define UNDEFINED 0
 # define WORD  1
@@ -36,6 +35,18 @@ typedef struct s_token
 	struct s_token	*next;
 } t_token;
 
+typedef struct s_env
+{
+	char *str;
+	struct s_env *next;
+}	t_env;
+
+
+typedef struct s_cmd
+{
+	char	**cmd;
+	struct	s_cmd	*next;
+}	t_cmd;
 typedef struct s_data
 {
 	int		i;
@@ -74,5 +85,15 @@ int		tokenizer(t_data *parsing);
 void	lexing_init(t_data *parsing, char *str);
 //token_quoting
 int		token_quoting(t_data *parsing);
+
+t_env   *new_var(char *str);
+void    add_back_env(t_env *env, t_env *var);
+
+void	shell_echo(t_token *tokens_list);
+void	shell_cd(t_token *tokens_list);
+void	shell_pwd(void);
+void	shell_env(t_env *env);
+void	shell_export(t_env *env, t_token *tokens_list);
+void	shell_unset(t_env **env, t_token *tokens_list);
 
 #endif
