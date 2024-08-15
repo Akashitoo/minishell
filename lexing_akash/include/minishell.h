@@ -16,7 +16,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
-# include "libft/libft.h"
+# include "../../libft/libft.h"
 
 # define UNDEFINED 0
 # define WORD  1
@@ -67,7 +67,6 @@ typedef struct s_data
 
 //libft
 int		ft_strncmp(const char *str1, const char *str2, size_t n) ;
-int		ft_putstr_fd(char *s, int fd);
 //utils
 int		is_blank(char c);
 int		is_op(char c);

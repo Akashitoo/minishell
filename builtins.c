@@ -9,7 +9,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "lexing_akash/include/minishell.h"
 
 int	is_full_n(char *str)
 {

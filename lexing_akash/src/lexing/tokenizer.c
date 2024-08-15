@@ -48,10 +48,8 @@ int	tokenizer2(t_data *parsing)
 {
 	if (is_op(parsing->str[parsing->i]))
 	{
-		printf("je rentre dans is_op\n");
 		if (parsing->flag && !parsing->is_last_op)
 		{
-			printf("creation d'un token de %d a %d inclus\n", parsing->last_tok, parsing->i);
 			parsing->i--;
 			if (!create_token(parsing))
 				return (freetokens(parsing->token_list), 0);
@@ -85,7 +83,6 @@ int	tokenizer3(t_data *parsing)
 			parsing->i--;
 			if (!create_token(parsing))
 				return (printf("check\n"), freetokens(parsing->token_list), 0);
-			printf("valeur de flag : %d \n", parsing->flag);
 			parsing->i++;
 			parsing->flag = 0;
 		}
@@ -102,7 +99,6 @@ int	tokenizer3(t_data *parsing)
 	}
 	else
 	{
-		printf("mise en place du flag a 1\n");
 		parsing->flag = 1;
 		parsing->is_last_word = 2;			
 	}
@@ -111,14 +107,11 @@ int	tokenizer3(t_data *parsing)
 int	end_of_input(t_data *parsing)
 {
 	t_token *new_token;
-
-	print_parsing(parsing);
 	if (parsing->flag)
 	{
-		printf("valeur de flag : %d \n", parsing->flag);
 		parsing->i--;
 		if (!create_token(parsing))
-			return (printf("check\n"), freetokens(parsing->token_list), 0);
+			return (freetokens(parsing->token_list), 0);
 	}
 	else
 	{
@@ -146,7 +139,6 @@ int	tokenizer(t_data *parsing)
 {
 	while (parsing->str[parsing->i])
 	{
-		print_parsing(parsing);
 		parsing->status = 1;
 		if (!tokenizer1(parsing))
 			return (0);

@@ -270,6 +270,7 @@ int	main(int argc, char **argv, char **envp)
 				shell_unset(&environ, tokens_list);
 			else if (ft_strncmp(tokens_list->str, "exit", 4) == 0)
 				break;
+			print_tokens(tokens_list);
 			exec_line(tokens_list);
 			free_tokens_list(tokens_list);
 		}
