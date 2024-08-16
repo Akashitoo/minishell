@@ -26,11 +26,12 @@ typedef struct s_data {
 	int		infile;
 	int		outfile;
 	int		current[2];
-	char	**argv;
+	//char	**argv;
 	char	**args;
 	char	**args2;
 	char	**envp;
 	int		previous;
+	t_cmd	*cmd_list;
 }			t_data;
 
 void	init_var(t_data *pipex, char **argv, char **envp, int argc);

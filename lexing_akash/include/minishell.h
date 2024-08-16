@@ -16,6 +16,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
+# include <sys/wait.h>
+# include <sys/types.h>
+# include <errno.h>
+# include <fcntl.h>
+# include <string.h>
 # include "../../libft/libft.h"
 
 # define UNDEFINED 0
@@ -63,7 +68,28 @@ typedef struct s_data
 } t_data;
 
 
+typedef struct s_pipex {
+	int		infile;
+	int		outfile;
+	int		current[2];
+	//char	**argv;
+	char	**args;
+	char	**args2;
+	char	**envp;
+	int		previous;
+	t_cmd	*cmd_list;
+}			t_pipex;
 
+void	init_var(t_pipex *pipex, int infile, int outfile, t_cmd *cmd_list, t_env *environ);
+void	check_files(t_pipex *pipex, char **argv);
+void	check_args(t_pipex *pipex);
+void	free_tab(char **tab);
+char	*get_path(char *cmd, t_pipex *pipex, int last_cmd);
+void	free_close(t_pipex *pipex);
+void	error_file_exit(t_pipex *pipex, char *file, int status);
+void	error_cmd_exit(t_pipex *pipex, char *cmd, int status);
+char	*get_path2(char *cmd, t_pipex *pipex, int last_cmd);
+void	pipex(int infile, int outfile, t_cmd *cmd_list, t_env *environ);
 
 //libft
 int		ft_strncmp(const char *str1, const char *str2, size_t n) ;

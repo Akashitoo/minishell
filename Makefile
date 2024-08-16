@@ -7,6 +7,9 @@ CFLAGS = -Wall -Werror -Wextra -g
 
 SRCS = minishell.c \
        builtins.c \
+	   pipex.c \
+	   init.c \
+	   utils.c \
 	   lexing_akash/src/lexing/create_token.c \
 	   lexing_akash/src/lexing/token_quoting.c \
 	   lexing_akash/src/lexing/tokenizer.c \

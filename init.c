@@ -9,7 +9,7 @@
 /*   Updated: 2024/05/31 16:47:53 by abalasub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "pipex.h"
+#include "lexing_akash/include/minishell.h"
 
 /*
 void	init_var(t_data *pipex, char **argv, char **envp, int argc)
@@ -34,22 +34,51 @@ char	**last_cmd(t_cmd	*cmd_list)
 	t_cmd	*current;
 
 	current = cmd_list;
-	while (!current->next)
+	while (current->next)
 	{
 		current = current->next;
 	}
-	return (current);
+	return (current->cmd);
 }
-void	init_var(int infile, int outfile, t_cmd *cmd_list, t_env environ)
+
+char	**convert_to_tab(t_env *env)
+{
+	t_env	*current;
+	int	size;
+	int	i;
+	char	**environ;
+
+	current = env;
+	size = 0;
+	while (current)
+	{
+		size++;
+		current = current->next;
+	}
+	environ = malloc (sizeof(char *) * size + 1);
+	current = env;
+	i = 0;
+	while (current->next)
+	{
+		environ[i] = current->str;
+		current = current->next;
+		i++;
+	}
+	return (environ);
+}
+
+void	init_var(t_pipex *pipex, int infile, int outfile, t_cmd *cmd_list, t_env *environ)
 {
 	pipex->infile = infile;
 	pipex->outfile = outfile;
 	pipex->previous = infile;
 	pipex->args = NULL;
+	pipex->cmd_list = cmd_list;
 	pipex->args2 = last_cmd(cmd_list);
 	pipex->envp = convert_to_tab(environ);
-}	
-void	error_cmd_exit(t_data *pipex, char *file, int status)
+}
+
+void	error_cmd_exit(t_pipex *pipex, char *file, int status)
 {
 	if (access(file, F_OK) == -1)
 	{
@@ -65,7 +94,7 @@ void	error_cmd_exit(t_data *pipex, char *file, int status)
 	exit(status);
 }
 
-void	error_file_exit(t_data *pipex, char *file, int status)
+void	error_file_exit(t_pipex *pipex, char *file, int status)
 {
 	if (access(file, F_OK) == -1)
 	{

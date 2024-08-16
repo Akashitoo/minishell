@@ -12,7 +12,7 @@
 
 #include "lexing_akash/include/minishell.h"
 
-
+/*
 void	free_tab(char **tab)
 {
 	int 	i;
@@ -26,7 +26,7 @@ void	free_tab(char **tab)
 		i++;
 	}
 	free(tab);
-}
+}*/
 /*
 t_token	*new_token(char *str, int type)
 {
@@ -212,7 +212,7 @@ char	**create_cmd_tab(t_token *first_word)
 	return (tab);
 }
 
-void	exec_line(t_token *token_list)
+void	exec_line(t_token *token_list, t_env *environ)
 {
 	t_token	*current_token;
 	t_cmd	*cmd_list;
@@ -238,9 +238,17 @@ void	exec_line(t_token *token_list)
 				cmd_list = new_cmd(create_cmd_tab(current_token));
 			else
 				add_back_cmd_list(new_cmd(create_cmd_tab(current_token)), cmd_list);
+			while (current_token && current_token->type == 1)
+			{
+				current_token = current_token->next;
+			}
 		}
-		current_token = current_token->next;
+		if (current_token->next)
+			current_token = current_token->next;
 	}
+	printf("%s\n",cmd_list->cmd[0]);
+	(void) environ;
+	//pipex(infile, outfile, cmd_list, environ);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -271,7 +279,7 @@ int	main(int argc, char **argv, char **envp)
 			else if (ft_strncmp(tokens_list->str, "exit", 4) == 0)
 				break;
 			print_tokens(tokens_list);
-			exec_line(tokens_list);
+			exec_line(tokens_list, environ);
 			free_tokens_list(tokens_list);
 		}
 	}

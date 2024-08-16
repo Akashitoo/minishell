@@ -9,7 +9,7 @@
 /*   Updated: 2024/05/31 18:04:25 by abalasub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "pipex.h"
+#include "lexing_akash/include/minishell.h"
 
 void	free_tab(char **tab)
 {
@@ -26,7 +26,7 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-void	free_close(t_data *pipex)
+void	free_close(t_pipex *pipex)
 {
 	free_tab(pipex->args2);
 	free_tab(pipex->args);
@@ -44,7 +44,7 @@ char	**env_path(char **envp)
 	return (ft_split(envp[i] + 5, ':'));
 }
 
-char	*get_path(char *cmd, t_data *pipex, int last_cmd)
+char	*get_path(char *cmd, t_pipex *pipex, int last_cmd)
 {
 	int		j;
 	char	*path;
@@ -69,7 +69,7 @@ char	*get_path(char *cmd, t_data *pipex, int last_cmd)
 	return (error_cmd_exit(pipex, cmd, last_cmd), NULL);
 }
 
-char	*get_path2(char *cmd, t_data *pipex, int last_cmd)
+char	*get_path2(char *cmd, t_pipex *pipex, int last_cmd)
 {
 	int		j;
 	char	*path;
