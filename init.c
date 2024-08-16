@@ -47,6 +47,7 @@ void	init_var(int infile, int outfile, t_cmd *cmd_list, t_env environ)
 	pipex->previous = infile;
 	pipex->args = NULL;
 	pipex->args2 = last_cmd(cmd_list);
+	pipex->envp = convert_to_tab(environ);
 }	
 void	error_cmd_exit(t_data *pipex, char *file, int status)
 {
