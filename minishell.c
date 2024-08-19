@@ -225,12 +225,14 @@ void	exec_line(t_token *token_list, t_env *environ)
 	{
 		if (current_token->type == 2)
 		{
-			infile = current_token->next->fd; 
+			infile = current_token->next->fd;
+			infile = 0;
 			current_token = current_token->next;
 		}
 		else if (current_token->type == 3)
 		{
 			outfile = current_token->next->fd;
+			outfile = 1;
 			current_token = current_token->next;
 		}
 		else if (current_token->type == 1)
@@ -241,14 +243,14 @@ void	exec_line(t_token *token_list, t_env *environ)
 			}
 			else
 				add_back_cmd_list(new_cmd(create_cmd_tab(current_token)), cmd_list);
-			while (current_token && current_token->type == 1)
+			while (current_token && current_token->next->type == 1)
 			{
 				current_token = current_token->next;
 			}
 		}
+		current_token = current_token->next;
 	}
-	(void) environ;
-	//pipex(infile, outfile, cmd_list, environ);
+	pipex(infile, outfile, cmd_list, environ);
 }
 
 int	main(int argc, char **argv, char **envp)
