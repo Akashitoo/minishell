@@ -208,6 +208,7 @@ char	**create_cmd_tab(t_token *first_word)
 	{
 		tab[i] = current->str;
 		current = current->next;
+		i++;
 	}
 	return (tab);
 }
@@ -224,18 +225,20 @@ void	exec_line(t_token *token_list, t_env *environ)
 	{
 		if (current_token->type == 2)
 		{
-			infile = current_token->next->fd;
+			infile = current_token->next->fd; 
 			current_token = current_token->next;
 		}
-		if (current_token->type == 3)
+		else if (current_token->type == 3)
 		{
 			outfile = current_token->next->fd;
 			current_token = current_token->next;
 		}
-		if (current_token->type == 1)
+		else if (current_token->type == 1)
 		{
 			if (!cmd_list)
+			{
 				cmd_list = new_cmd(create_cmd_tab(current_token));
+			}
 			else
 				add_back_cmd_list(new_cmd(create_cmd_tab(current_token)), cmd_list);
 			while (current_token && current_token->type == 1)
@@ -243,10 +246,7 @@ void	exec_line(t_token *token_list, t_env *environ)
 				current_token = current_token->next;
 			}
 		}
-		if (current_token->next)
-			current_token = current_token->next;
 	}
-	printf("%s\n",cmd_list->cmd[0]);
 	(void) environ;
 	//pipex(infile, outfile, cmd_list, environ);
 }

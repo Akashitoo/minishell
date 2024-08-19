@@ -52,6 +52,7 @@ typedef struct s_cmd
 	char	**cmd;
 	struct	s_cmd	*next;
 }	t_cmd;
+
 typedef struct s_data
 {
 	int		i;
