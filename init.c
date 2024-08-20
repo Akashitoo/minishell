@@ -55,15 +55,16 @@ char	**convert_to_tab(t_env *env)
 		size++;
 		current = current->next;
 	}
-	environ = malloc (sizeof(char *) * size + 1);
+	environ = malloc (sizeof(char *) * (size + 1));
 	current = env;
 	i = 0;
-	while (current->next)
+	while (current)
 	{
 		environ[i] = current->str;
 		current = current->next;
 		i++;
 	}
+	environ[i] = 0;
 	return (environ);
 }
 

@@ -199,7 +199,7 @@ char	**create_cmd_tab(t_token *first_word)
 		size += 1;
 		current = current->next;	
 	}
-	tab = malloc(sizeof(char *));
+	tab = malloc(sizeof(char *) * (size + 1) );
 	if (!tab)
 		return (NULL);
 	current = first_word;
@@ -210,6 +210,7 @@ char	**create_cmd_tab(t_token *first_word)
 		current = current->next;
 		i++;
 	}
+	tab[i] = 0;
 	return (tab);
 }
 
@@ -219,6 +220,9 @@ void	exec_line(t_token *token_list, t_env *environ)
 	t_cmd	*cmd_list;
 	int infile;
 	int outfile;
+
+	infile = 0;
+	outfile = 1;
 	cmd_list = NULL;
 	current_token = token_list;
 	while (current_token)
@@ -226,13 +230,13 @@ void	exec_line(t_token *token_list, t_env *environ)
 		if (current_token->type == 2)
 		{
 			infile = current_token->next->fd;
-			infile = 0;
+			infile = open(current_token->next->str, O_RDWR);
 			current_token = current_token->next;
 		}
 		else if (current_token->type == 3)
 		{
 			outfile = current_token->next->fd;
-			outfile = 1;
+			outfile = open(current_token->next->str, O_RDWR);
 			current_token = current_token->next;
 		}
 		else if (current_token->type == 1)
@@ -242,7 +246,9 @@ void	exec_line(t_token *token_list, t_env *environ)
 				cmd_list = new_cmd(create_cmd_tab(current_token));
 			}
 			else
-				add_back_cmd_list(new_cmd(create_cmd_tab(current_token)), cmd_list);
+			{
+				add_back_cmd_list(cmd_list, new_cmd(create_cmd_tab(current_token)));
+			}
 			while (current_token && current_token->next->type == 1)
 			{
 				current_token = current_token->next;
@@ -262,7 +268,7 @@ int	main(int argc, char **argv, char **envp)
 	environ = create_env(envp);
 	while (1)
 	{
-		prompt = readline("minishell>");
+		prompt = readline(">minishell$ ");
 		tokens_list = create_tokens_list(prompt);
 		if (tokens_list)
 		{
@@ -280,9 +286,8 @@ int	main(int argc, char **argv, char **envp)
 				shell_unset(&environ, tokens_list);
 			else if (ft_strncmp(tokens_list->str, "exit", 4) == 0)
 				break;
-			print_tokens(tokens_list);
 			exec_line(tokens_list, environ);
-			free_tokens_list(tokens_list);
+			freetokens(tokens_list);
 		}
 	}
 	free(prompt);

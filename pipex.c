@@ -71,5 +71,4 @@ void	pipex(int infile, int outfile, t_cmd *cmd_list, t_env *environ)
 		execute_last(&pipex);
 	close(pipex.previous);
 	waitpid(-1, &status, 0);
-	free_tab(pipex.envp);
 }
