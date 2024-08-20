@@ -110,7 +110,6 @@ t_env	*create_env(char **tab)
 t_cmd	*new_cmd(char **tab)
 {
 	t_cmd	*cmd;
-
 	cmd = malloc(sizeof(t_cmd));
 	if	(!cmd)
 		return(NULL);
@@ -129,23 +128,6 @@ void	add_back_cmd_list(t_cmd *cmd_list, t_cmd *cmd)
 		current = current->next; 
 	}
 	current->next = cmd;
-}
-
-void	free_cmd_list(t_cmd *cmd_list)
-{
-	t_cmd	*current;
-	t_cmd	*next;
-	
-	if (!cmd_list)
-		return ;
-	current = cmd_list;
-	next = current->next;
-	while (current)
-	{
-		next = current->next;
-		free(current);
-		current = next;
-	}
 }
 
 void	free_tokens_list(t_token *tokens_list)
@@ -214,6 +196,22 @@ char	**create_cmd_tab(t_token *first_word)
 	return (tab);
 }
 
+void	free_cmd_list(t_cmd *cmd_list)
+{
+	t_cmd	*current;
+	t_cmd	*next;
+
+	current = cmd_list;
+
+	while (current)
+	{
+		next = current->next;
+		free(current->cmd);
+		free(current);
+		current = next;
+	}
+}
+
 void	exec_line(t_token *token_list, t_env *environ)
 {
 	t_token	*current_token;
@@ -257,6 +255,7 @@ void	exec_line(t_token *token_list, t_env *environ)
 		current_token = current_token->next;
 	}
 	pipex(infile, outfile, cmd_list, environ);
+	free_cmd_list(cmd_list);
 }
 
 int	main(int argc, char **argv, char **envp)
