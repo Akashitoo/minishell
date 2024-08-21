@@ -247,7 +247,7 @@ void	exec_line(t_token *token_list, t_env *environ)
 			{
 				add_back_cmd_list(cmd_list, new_cmd(create_cmd_tab(current_token)));
 			}
-			while (current_token && current_token->next->type == 1)
+			while (current_token->next && current_token->next->type == 1)
 			{
 				current_token = current_token->next;
 			}

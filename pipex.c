@@ -69,7 +69,8 @@ void	pipex(int infile, int outfile, t_cmd *cmd_list, t_env *environ)
 		ft_putstr_fd("process failed", 2);
 	if (pid2 == 0)
 		execute_last(&pipex);
-	close(pipex.previous);
+	if (pipex.previous != 0)
+		close(pipex.previous);
 	waitpid(-1, &status, 0);
 	free(pipex.envp);
 }
