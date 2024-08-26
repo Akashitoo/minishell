@@ -13,20 +13,39 @@ void	lexing_init(t_data *parsing, char *str)
 	parsing->token_list = NULL;
 	
 }
-/*
-int main (int argc, char **argv)
+t_token *parsing_extended(char *argv)
 {
 	t_data 	parsing;
 
-	if (argc != 2)
-		return (0);
-	lexing_init(&parsing, argv[1]);
-	//jusqu'ici aucun malloc de fait
+	lexing_init(&parsing, argv);
 	if (!tokenizer(&parsing))
-		return (0);
-	
-
-	freetokens(parsing.token_list);
-	return (1);
+		return (freetokens(parsing.token_list), NULL);
+	if (ft_parsing (&parsing) == 0)
+		return (freetokens(parsing.token_list), NULL);
+	//print_tokens(parsing.token_list);
+	if (!ft_word_expansion(&parsing))
+		return (freetokens(parsing.token_list), NULL);
+	if (!redirection(&parsing))
+		return (freetokens(parsing.token_list), NULL);
+	//print_tokens(parsing.token_list);
+	return (parsing.token_list);
 }
-*/
+
+
+// int main() {
+//     char *path = getenv("USER");
+//     if (path != NULL) {
+//         printf("La valeur de PATH est : %s\n", path);
+//     } else {
+//         printf("La variable PATH n'est pas définie.\n");
+//     }
+
+//     char *ma_variable = getenv("MA_VARIABLE");
+//     if (ma_variable != NULL) {
+//         printf("La valeur de MA_VARIABLE est : %s\n", ma_variable);
+//     } else {
+//         printf("MA_VARIABLE n'est pas définie.\n");
+//     }
+
+//     return 0;
+// }

@@ -6,7 +6,7 @@
 /*   By: atrabut <atrabut@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:02:11 by atrabut           #+#    #+#             */
-/*   Updated: 2024/08/01 18:05:05 by atrabut          ###   ########.fr       */
+/*   Updated: 2024/08/26 16:20:32 by atrabut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int tokenizer1(t_data *parsing)
 {
-	//printf("appel de tokenizer1\n");
 	if (parsing->i > 0)
 		parsing->is_last_op = is_op(parsing->str[parsing->i - 1]);
 	if (parsing->is_last_op &&  parsing->i - parsing->last_tok > 0)
@@ -36,12 +35,8 @@ int tokenizer1(t_data *parsing)
 		}
 		parsing->flag = 0;
 	}
-	if ((parsing->status != 2 && parsing->str[parsing->i] == '\'' ) || (parsing->str[parsing->i] == '\"'))
-	parsing->status = token_quoting(parsing);
-	// else if (parsing->str[parsing->i] == '$')
-	// 	parsing->status = token_variable_env(&parsing);
-	else
-		parsing->status = 1;
+	if ((parsing->status != 2 && parsing->str[parsing->i] == '\'' ) || parsing->str[parsing->i] == '\"')
+		parsing->status = token_quoting(parsing);
 	return (parsing->status);
 }
 int	tokenizer2(t_data *parsing)
@@ -74,21 +69,19 @@ int	tokenizer2(t_data *parsing)
 }
 int	tokenizer3(t_data *parsing)
 {
-	//printf("appel de tokenizer3\n");
+ 
 	if (is_blank(parsing->str[parsing->i]))
 	{
-		//printf("on rentre dans is_blank\n");
 		if (parsing->flag)
 		{
 			parsing->i--;
 			if (!create_token(parsing))
-				return (printf("check\n"), freetokens(parsing->token_list), 0);
+				return (freetokens(parsing->token_list), 0);
 			parsing->i++;
 			parsing->flag = 0;
 		}
 		else 
 			parsing->last_tok++;
-		//printf("on sort de is_blank\n");
 	}
 	else if (parsing->is_last_word)
 		parsing->is_last_word = 2;
@@ -98,24 +91,21 @@ int	tokenizer3(t_data *parsing)
 			parsing->i++;
 	}
 	else
-	{
-		parsing->flag = 1;
-		parsing->is_last_word = 2;			
-	}
+		tokenizer3_bis(parsing);
 	return (1);
 }
 int	end_of_input(t_data *parsing)
 {
 	t_token *new_token;
+
 	if (parsing->flag)
 	{
 		parsing->i--;
 		if (!create_token(parsing))
-			return (freetokens(parsing->token_list), 0);
+			return (printf("check\n"), freetokens(parsing->token_list), 0);
 	}
 	else
 	{
-		//printf("petit chek\n");
 		new_token = malloc(sizeof(t_token));
 		if (!new_token)
 			return (freetokens(parsing->token_list), 0);
@@ -125,9 +115,9 @@ int	end_of_input(t_data *parsing)
 		new_token->str[0] = '\0';
 		new_token->type = END;
 		new_token->next = NULL;
-		ft_lstadd_tok(parsing, new_token);
+		ft_lstadd_tok(&parsing->token_list, new_token);
 		}
-
+		
 	return (1);
 }
 
@@ -152,14 +142,12 @@ int	tokenizer(t_data *parsing)
 			if (!(tokenizer3(parsing)))
 				return (0);
 		}
-		//printf("val de status %d\n", parsing->status);
 		parsing->i++;
 		if (parsing->is_last_word > 0)
 			parsing->is_last_word--;
 	}
 	if (!end_of_input(parsing))
 		return (0);
-	//printf("FIN DE TOKENIZER\n");
 	return (1);
 }
 

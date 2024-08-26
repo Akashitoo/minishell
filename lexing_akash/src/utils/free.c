@@ -6,7 +6,7 @@
 /*   By: atrabut <atrabut@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 17:51:27 by atrabut           #+#    #+#             */
-/*   Updated: 2024/06/18 19:11:53 by atrabut          ###   ########.fr       */
+/*   Updated: 2024/08/16 17:03:00 by atrabut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	freetokens(t_token *token_list)
 {
 	t_token	*temp;
 
+	//printf("appel de free tokens\n");
 	if (token_list != NULL)
 	{
 		while(token_list)
