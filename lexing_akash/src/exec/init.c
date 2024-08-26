@@ -9,7 +9,7 @@
 /*   Updated: 2024/05/31 16:47:53 by abalasub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "lexing_akash/include/minishell.h"
+#include "../../include/minishell.h"
 
 /*
 void	init_var(t_data *pipex, char **argv, char **envp, int argc)

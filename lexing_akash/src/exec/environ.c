@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexing_akash/include/minishell.h"
+#include "../../include/minishell.h"
 
 t_env	*new_var(char *str)
 {

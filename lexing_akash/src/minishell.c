@@ -9,49 +9,7 @@
 /*   Updated: 2024/06/20 13:17:54 by abalasub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "lexing_akash/include/minishell.h"
-
-void	add_token_back(t_token *tokens_list, t_token *added_token)
-{
-	t_token *current;
-
-	current = tokens_list;
-	while (current->next)
-	{
-		current = current->next;
-	}
-	current->next = added_token;
-}
-
-t_token	*create_tokens_list(char *prompt)
-{
-	t_data 	parsing;
-
-	if (!prompt)
-		return (NULL);
-	lexing_init(&parsing, prompt);
-	if (!tokenizer(&parsing))
-		return (NULL);
-	return (parsing.token_list);
-}
-
-
-void	free_tokens_list(t_token *tokens_list)
-{
-	t_token	*current;
-	t_token	*next;
-
-	if (!tokens_list)
-		return ;
-	current = tokens_list;
-	next = current->next;
-	while (current)
-	{
-		next = current->next;
-		free(current);
-		current = next;
-	}
-}
+#include "../include/minishell.h"
 
 void	exec_line(t_token *token_list, t_env *environ)
 {
@@ -69,13 +27,11 @@ void	exec_line(t_token *token_list, t_env *environ)
 		if (current_token->type == 2)
 		{
 			infile = current_token->next->fd;
-			infile = open(current_token->next->str, O_RDWR);
 			current_token = current_token->next;
 		}
 		else if (current_token->type == 3)
 		{
 			outfile = current_token->next->fd;
-			outfile = open(current_token->next->str, O_RDWR);
 			current_token = current_token->next;
 		}
 		else if (current_token->type == 1)

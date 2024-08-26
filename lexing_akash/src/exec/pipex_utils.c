@@ -9,7 +9,7 @@
 /*   Updated: 2024/05/31 18:04:25 by abalasub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "lexing_akash/include/minishell.h"
+#include "../../include/minishell.h"
 
 void	free_tab(char **tab)
 {
